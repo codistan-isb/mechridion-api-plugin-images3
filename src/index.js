@@ -13,95 +13,95 @@ const mySchema = importAsString("./schema.graphql");
 
 var _context = null;
 
-const resolvers = {
-  Product: {
-    async media(parent, args, context, info) {
-      return parent.media;
-    },
-  },
-  ProductVariant: {
-    async media(parent, args, context, info) {
-      return parent.media ? parent.media : [];
-    },
-  },
+// const resolvers = {
+//   Product: {
+//     async media(parent, args, context, info) {
+//       return parent.media;
+//     },
+//   },
+//   ProductVariant: {
+//     async media(parent, args, context, info) {
+//       return parent.media ? parent.media : [];
+//     },
+//   },
 
-  CatalogProduct: {
-    media: async (parent, args, context, info) => {
-      return parent?.media
-        ? Promise.all(
-            parent?.media?.map(async (e) => {
-              return {
-                priority: e.priority,
-                productId: e.productId,
-                URLs: {
-                  thumbnail: await getSignedUrl(e?.URLs.thumbnail),
-                  large: await getSignedUrl(e?.URLs.large),
-                  medium: await getSignedUrl(e?.URLs.medium),
-                  original: await getSignedUrl(e?.URLs.original),
-                  small: await getSignedUrl(e?.URLs.small),
-                },
-              };
-            })
-          )
-        : [];
-    },
-    primaryImage: async (parent, args, context, info) => {
-      if (parent?.primaryImage) {
-        const URLs = parent.primaryImage.URLs;
-        const signedURLs = {};
-        for (const key in URLs) {
-          signedURLs[key] = await getSignedUrl(URLs[key]);
-        }
-        return { URLs: signedURLs };
-      } else {
-        return null;
-      }
-    },
-    planMedia: async (parent, args, context, info) => {
-      return parent?.media
-        ? Promise.all(
-            parent?.planMedia?.map(async (e) => {
-              return {
-                url: await getSignedUrl(e?.url),
-              };
-            })
-          )
-        : [];
-    },
-  },
-  Account: {
-    picture: async (parent, args, context, info) =>
-      parent?.profile?.picture
-        ? await getSignedUrl(parent?.profile?.picture)
-        : "",
-    govId: (parent, args, context, info) => {
-      return parent?.govId
-        ? Promise.all(
-            parent?.govId?.map(async (e) => {
-              return {
-                key: e?.key,
-                value: await getSignedUrl(e?.value),
-              };
-            })
-          )
-        : [];
-      // account.govId ?? []
-    },
-    poAddress: async (parent, args, context, info) => {
-      return parent?.poAddress
-        ? Promise.all(
-            parent?.poAddress?.map(async (e) => {
-              return {
-                address: e.address,
-                type: e.type,
-                document: await getSignedUrl(e?.document),
-              };
-            })
-          )
-        : [];
-    },
-  },
-};
+//   CatalogProduct: {
+//     media: async (parent, args, context, info) => {
+//       return parent?.media
+//         ? Promise.all(
+//             parent?.media?.map(async (e) => {
+//               return {
+//                 priority: e.priority,
+//                 productId: e.productId,
+//                 URLs: {
+//                   thumbnail: await getSignedUrl(e?.URLs.thumbnail),
+//                   large: await getSignedUrl(e?.URLs.large),
+//                   medium: await getSignedUrl(e?.URLs.medium),
+//                   original: await getSignedUrl(e?.URLs.original),
+//                   small: await getSignedUrl(e?.URLs.small),
+//                 },
+//               };
+//             })
+//           )
+//         : [];
+//     },
+//     primaryImage: async (parent, args, context, info) => {
+//       if (parent?.primaryImage) {
+//         const URLs = parent.primaryImage.URLs;
+//         const signedURLs = {};
+//         for (const key in URLs) {
+//           signedURLs[key] = await getSignedUrl(URLs[key]);
+//         }
+//         return { URLs: signedURLs };
+//       } else {
+//         return null;
+//       }
+//     },
+//     planMedia: async (parent, args, context, info) => {
+//       return parent?.media
+//         ? Promise.all(
+//             parent?.planMedia?.map(async (e) => {
+//               return {
+//                 url: await getSignedUrl(e?.url),
+//               };
+//             })
+//           )
+//         : [];
+//     },
+//   },
+//   Account: {
+//     picture: async (parent, args, context, info) =>
+//       parent?.profile?.picture
+//         ? await getSignedUrl(parent?.profile?.picture)
+//         : "",
+//     govId: (parent, args, context, info) => {
+//       return parent?.govId
+//         ? Promise.all(
+//             parent?.govId?.map(async (e) => {
+//               return {
+//                 key: e?.key,
+//                 value: await getSignedUrl(e?.value),
+//               };
+//             })
+//           )
+//         : [];
+//       // account.govId ?? []
+//     },
+//     poAddress: async (parent, args, context, info) => {
+//       return parent?.poAddress
+//         ? Promise.all(
+//             parent?.poAddress?.map(async (e) => {
+//               return {
+//                 address: e.address,
+//                 type: e.type,
+//                 document: await getSignedUrl(e?.document),
+//               };
+//             })
+//           )
+//         : [];
+//     },
+//   },
+// };
 
 function myStartup1(context) {
   _context = context;
@@ -342,7 +342,7 @@ export default async function register(app) {
     },
     graphQL: {
       schemas: [mySchema],
-      resolvers,
+      // resolvers,
     },
   });
 }
