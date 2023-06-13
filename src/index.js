@@ -117,11 +117,11 @@ function myStartup1(context) {
     app.expressApp.use(bodyParser.urlencoded({ extended: true }));
     app.expressApp.use(morgan("dev"));
     app.expressApp.post("/upload", async (req, res) => {
-      console.log("req.body", req.body);
-      console.log("req.files", req.files);
+      // console.log("req.body", req.body);
+      // console.log("req.files", req.files);
       let isMulti = req.body.isMulti;
       let uploadPath = req.body.uploadPath;
-      console.log("upload path is ", uploadPath);
+      // console.log("upload path is ", uploadPath);
       let uploads = [];
 
       sharp.cache(false);
@@ -137,12 +137,12 @@ function myStartup1(context) {
           //loop all files
           _.forEach(_.keysIn(req.files.photos), (key) => {
             let photo = req.files.photos[key];
-            console.log("multi photos are ", photo);
+            // console.log("multi photos are ", photo);
 
             let getType = photo.mimetype.split("/");
-            console.log("get type is ", getType);
+            // console.log("get type is ", getType);
             let fileType = getType[0];
-            console.log("file type is ", fileType);
+            // console.log("file type is ", fileType);
             let promise = S3UploadImage(
               req.files.photos[key].data,
               req.files.photos[key].name,
@@ -150,7 +150,7 @@ function myStartup1(context) {
               fileType,
               uploadPath
             ).then((uploadResponse) => {
-              console.log("upload response", uploadResponse);
+              // console.log("upload response", uploadResponse);
               if (uploadResponse[key]) {
                 data[uploadResponse[key]].url = uploadResponse.url;
               }
@@ -164,7 +164,7 @@ function myStartup1(context) {
           });
           Promise.all(uploads)
             .then(async function () {
-              console.log("data in promises", data);
+              // console.log("data in promises", data);
               res.send({
                 status: true,
                 message: "Files are uploaded",
@@ -178,14 +178,13 @@ function myStartup1(context) {
           //return response
         } else if (isMulti == "false") {
           let data = [];
-
           //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
           let photo = req.files.photos;
           let getType = photo.mimetype.split("/");
-          console.log("get type is ", getType);
+          // console.log("get type is 184 ", getType);
           let fileType = getType[0];
-          console.log("file type is ", fileType);
-          console.log("photo is ", photo);
+          // console.log("file type is 186 ", fileType);
+          // console.log("photo is 187 ", photo);
 
           data.push({
             name: photo.name,
@@ -200,7 +199,7 @@ function myStartup1(context) {
             uploadPath
           ).then((uploadResponse) => {
             data[0].url = uploadResponse.url;
-            console.log("upload response is ", uploadResponse);
+            // console.log("upload response is ", uploadResponse);
 
             res.send({
               status: true,

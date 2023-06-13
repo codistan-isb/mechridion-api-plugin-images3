@@ -34,7 +34,7 @@ export async function generateThumbs(filename, uploadName, key) {
   // }
   await Promise.all(promises)
     .then((results) => {
-      console.log("All done", results);
+      // console.log("All done", results);
       return true;
     })
     .catch((e) => {
@@ -62,13 +62,19 @@ export async function S3UploadImage(fileContent, uploadName, key, fileType, uplo
       }));
 
       await Promise.all(resizedImages.map(async (image, index) => {
+        // console.log("Images 65 ", image)
         const params = {
           Bucket: BUCKET_NAME,
           Key: `${uploadPath}/${imgTransforms[index].name}-${currentTime}-${uploadName}`,
+          Size: imgTransforms[index].name,
           Body: image,
         };
+        // console.log("params 71 ", params)
+        // console.log("imgTransforms[index].name 72 ", imgTransforms[index].name)
+        // console.log("uploadName 73 ", uploadName)
         const { Location, Key } = await s3.upload(params).promise();
-        urlsArray.push({Location, Key});
+        // console.log("Upload Await Response 75 ", await s3.upload(params).promise())
+        urlsArray.push({ Location, Size: imgTransforms[index].name });
       }));
     } else {
       // for uploading documents only
@@ -78,8 +84,9 @@ export async function S3UploadImage(fileContent, uploadName, key, fileType, uplo
         Body: fileContent,
       };
       const { Location, Key } = await s3.upload(params).promise();
-      urlsArray.push({Location, Key});
+      urlsArray.push({ Location, Key });
     }
+    // console.log("Final Array 89 ", urlsArray)
     return {
       status: true,
       msg: `All files uploaded successfully.`,

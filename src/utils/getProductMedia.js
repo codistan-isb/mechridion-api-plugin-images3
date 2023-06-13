@@ -17,7 +17,7 @@ export default async function getProductMedia(context, productId) {
   const selector = {
     _id: productId,
   };
-  console.log(selector);
+  // console.log(selector);
 
   return Products.find(selector).toArray();
 }
