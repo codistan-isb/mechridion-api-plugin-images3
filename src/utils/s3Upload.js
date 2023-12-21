@@ -11,7 +11,7 @@ const promises = [];
 
 const imgTransforms = [
   {
-    name: "image",
+    name: "original",
     transform: { size: 1600, fit: "inside", format: "jpg", type: "image/jpeg" },
   },
   {
@@ -21,6 +21,10 @@ const imgTransforms = [
   {
     name: "medium",
     transform: { size: 600, fit: "inside", format: "jpg", type: "image/jpeg" },
+  },
+  {
+    name: "small",
+    transform: { size: 450, fit: "inside", format: "jpg", type: "image/jpeg" },
   },
   {
     name: "thumbnail",
